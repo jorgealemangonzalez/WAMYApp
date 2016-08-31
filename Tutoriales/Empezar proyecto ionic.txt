@@ -1,0 +1,66 @@
+﻿1) Descargar IntellijIdea e instalar integrado con angular y nodejs
+2) Instalar ionic y cordova . "npm install -g ionic cordova"
+3) Empezar proyecto ionic start nameproyect [template]
+4) Añadir plataformas : ionic platform add android  .. ios
+5) probar: ionic serve --lab
+
+
+
+
+CONTROLLERS ASINCRONOS // With the new view caching in Ionic, Controllers are only called
+                         // when they are recreated or on app start, instead of every page change.
+                         // To listen for when this page is active (for example, to refresh data),
+                         // listen for the $ionicView.enter event:
+                         //
+                         //$scope.$on('$ionicView.enter', function(e) {
+                         //});
+
+sockets:
+    - ionic add angular-socket io
+    - añadir al index <script src="lib/angular-socket-io/socket.js"></script>
+    - ioCustom a /lib/ , añadir script en el index  (PARA AÑADIR EL COMPONENTE io )
+    - añadir componente en app.js 'btford.socket-io'
+    - añadir a services la connexion con el socket: factory('socket',function(socketFactory){
+
+                                                             var myIoSocket = io.connect('http://188.166.119.111:8080/');
+
+                                                              mySocket = socketFactory({
+                                                                ioSocket: myIoSocket
+                                                              });
+
+                                                            return mySocket;
+                                                        })
+    - correr servidor node , correr aplicacion
+
+
+mapa:
+
+    - añadir carpeta "maps" a los plugins
+    - añadir plugin ngCordova
+    - inyectar en index.html y app.js ( <script src="lib/ngCordova/dist/ng-cordova.js"></script> ) antes de codova.js
+    - añadir en el css :
+                       #map {
+                         width: 100%;
+                         height: 100%;
+                         top:0px;
+                         left:0px;
+                         z-index:2;
+                       }
+
+                       .scroll {
+                         height: 100%;
+                       }
+
+                       div#miposicion{
+                         position:fixed;
+                         z-index:99;
+                         bottom:15px;
+                       }
+
+
+util:
+-conectar con IP diferente -> ionic serve --address [IP]
+
+Ionic en visual studio:
+https://taco.visualstudio.com/en-us/docs/tutorial-ionic/#manualImport
+-Ejecutar en emulador android con : debug > android > VS Emulator ... Phone

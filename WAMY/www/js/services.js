@@ -1,10 +1,25 @@
-angular.module('starter.services', [])
+angular.module('starter.services', ['ngCordova'])
 
-.factory('Chats', function() {
-  // Might use a resource here that returns a JSON array
+.factory('Contacts', function($localStorage,$cordovaContacts) {
+  //TODO obtener contactos del movil o de una cuenta de google ( en tabletas a lo mejor no hay contactos de movil )
+  //TODO https://www.thepolyglotdeveloper.com/2014/11/create-delete-search-contacts-ionic-framework/
+  //TODO https://developers.google.com/google-apps/contacts/v3/
+
+  var findOptions = {
+    filter:"",
+    multiple:true,
+    desiredFields:["Nombre","displayName","movil"],
+    hasPhoneNumber:true
+  };
+  var movileContacts;
+  $cordovaContacts.find(findOptions).then(function (result){
+    Console.log("Contactos en el telefono: ");
+    Console.log(result);
+    movileContacts = result;
+  });
 
   // Some fake testing data
-  var chats = [{
+  var contacts = [{
     id: 0,
     name: 'Ben Sparrow',
     lastText: 'You on your way?',
@@ -33,18 +48,30 @@ angular.module('starter.services', [])
 
   return {
     all: function() {
-      return chats;
+      return contacts;
     },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
+    remove: function(contact) {
+      contacts.splice(contacts.indexOf(contact), 1);
     },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
+    get: function(contactId) {
+      for (var i = 0; i < contacts.length; i++) {
+        if (contacts[i].id === parseInt(contactId)) {
+          return contacts[i];
         }
       }
       return null;
     }
   };
-});
+})
+
+.factory('socket',function(socketFactory){
+
+  var myIoSocket = io.connect('http://localhost:8080/');
+
+  mySocket = socketFactory({
+    ioSocket: myIoSocket
+  });
+
+  return mySocket;
+})
+;
