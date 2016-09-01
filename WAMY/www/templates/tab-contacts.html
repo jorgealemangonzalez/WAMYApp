@@ -1,17 +1,13 @@
 <ion-view view-title="Contacts">
   <ion-content>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-toggle" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
-        <!--<i class="icon ion-chevron-right icon-accessory"></i>-->
-        <!--
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
-        </ion-option-button> -->
-        <label class="toggle toggle-assertive">
-          <input type="checkbox" ng-checked="{{!chat.available}}">
+      <ion-item class="item-avatar item-toggle" ng-repeat="contact in contacts" type="item-text-wrap">
+        <img ng-src="{{contact.face}}">
+        <h2>{{contact.name}}</h2>
+        <h4>{{contact.lastText}}</h4>
+        <p>Las position: 1 min ago</p>
+        <label class="toggle">
+          <input type="checkbox" ng-model="contact.available">
           <div class="track">
             <div class="handle"></div>
           </div>

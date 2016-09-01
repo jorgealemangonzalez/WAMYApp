@@ -3,8 +3,13 @@ angular.module('starter.controllers', [])
 //TODO conectar con socket al servidor proveedor de sockets y devolver a cada usuario una referencia al socket del otro.
 //TODO pagar google maps https://developers.google.com/maps/documentation/geocoding/usage-limits
 //TODO que te coja los contactos del telefono o de google ( telefono mejor ?)
-
-.controller('MapCtrl', function($scope,$ionicLoading,$cordovaGeolocation,$location , $localStorage) {
+//TODO iconos de persanajes distintos.
+// TODO sistemas de pedir la posicion que si no te la devuelve cada vez lo pidas cada mas tiempo
+  //TODO desactivar todo para dejar luego solo unos pocos activados.
+  //TODO feedback de que el otro contacto no le tiene habilitada la localización . Mensaje en la pantalla al otro usuario de que debe activar la localización.
+  //TODO actualizar contactos que tengan la app
+//TODO obtener prefijo de un numero para realizar la consulta sobre el numero especifico de localizacion especiifica.
+.controller('MapCtrl', function($scope,$ionicLoading,$cordovaGeolocation,$location , $localStorage , Contacts) {
   var posOptions = {timeout: 5000, enableHighAccuracy: true};
   var myPosition;
   var mymarker;
@@ -41,7 +46,21 @@ angular.module('starter.controllers', [])
       map: $scope.map,
       icon: "./img/point_me.png"
     });
+    //My contacts markers
+    console.log(Contacts.all());
+    angular.forEach(Contacts.all(), function(contact){
+      console.log(contact);
+      if(contact.available){
+        //Put a mark in the map.
+        console.log("mark in "+contact.position);
+        var marker = new google.maps.Marker({
+          position: contact.position,
+          map: $scope.map,
+          title: contact.name
+        });
 
+      }
+    });
     $ionicLoading.hide();
   }
 
@@ -64,20 +83,13 @@ angular.module('starter.controllers', [])
   $scope.posMe();
 })
 
-.controller('ContactsCtrl', function($scope, Contacts , socket , $localStorage) {
+.controller('ContactsCtrl', function($scope, Contacts , socket , $localStorage,$rootScope) {
   //TODO en la descripcion de la card poner la ultima posicion conocida del contacto.
   //TODO conectar con cuenta de correo ? vs identificador unico ( todos los identificadores guardados en una base de datos )
+  $rootScope.$emit('loadContacts');
+  $scope.contacts = Contacts.all();
 
-  $scope.chats = Contacts.all();
-  $scope.remove = function(chat) {
-    Contacts.remove(chat);
-  };
 })
-
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
 .controller('AccountCtrl', function($scope) {
   //TODO foto , nombre que ven los contactos ( empieza con el mail sin @ ) , posicion establecida automaticamente o manual ( la de la descripcion )
   $scope.settings = {
